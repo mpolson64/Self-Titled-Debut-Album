@@ -53,7 +53,7 @@ function nounsOfNouns() {
     });
 }
 
-function generate() {
+function generateBandName() {
     switch(Math.floor(Math.random() * ARCHETYPES)) {
         case 0:
             theNouns();
@@ -70,9 +70,13 @@ function generate() {
     }
 }
 
+function genre() {
+    var genres = ['acoustic', 'alternative', 'blues', 'country', 'electronic', 'hip-hop', 'neo-jazz', 'metal', 'pop', 'rock', 'rap'];
+    return genres[Math.floor(Math.random() * genres.length)];
+}
 
-generate();
+generateBandName();
 
 body.on('update', function() {
-    console.log(body.bandName);
+    console.log('New ' + genre() + ' band called ' + body.bandName);
 });
