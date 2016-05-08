@@ -14,5 +14,10 @@
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/mpolson64/self-titled-debut-album/issues"
+  },
+  "dependencies": {
+    "events": "^1.1.0",
+    "https": "^1.0.0",
+    "request": "^2.72.0"
   }
 }
