@@ -44,7 +44,7 @@ function properNounAndTheNouns() {
     });
 }
 
-function nounsOfNouns() {
+function nounsOfNoun() {
     request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&includePartOfSpeech=noun-plural&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
         body.bandName = JSON.parse(data).word.capitalize();
         body.emit('subUpdate');
@@ -69,7 +69,7 @@ function generateBandName() {
             properNounAndTheNouns();
             break;
         case 3:
-            nounsOfNouns();
+            nounsOfNoun();
             break;
     }
 }
