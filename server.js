@@ -1,7 +1,7 @@
 var request = require('request');
 var EventEmitter = require('events').EventEmitter;
 
-const ARCHETYPES = 4;
+const ARCHETYPES = 7;
 
 const WORDNIK_API_KEY = process.env.WORDNIK_API_KEY;
 
@@ -57,6 +57,39 @@ function nounsOfNoun() {
     });
 }
 
+function properNounTheNoun() {
+    request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&includePartOfSpeech=proper-noun&excludePartOfSpeach=proper-noun-plural&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
+        body.bandName = JSON.parse(data).word.capitalize();
+        body.emit('subUpdate');
+    });
+    body.on('subUpdate', function() {
+        request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&includePartOfSpeech=noun&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
+            body.bandName += ' the ' + JSON.parse(data).word.capitalize();
+            body.emit('update');
+        });
+    });
+}
+
+function nounDashNumber() {
+    request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&includePartOfSpeech=proper-noun&excludePartOfSpeach=proper-noun-plural&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
+        body.bandName = JSON.parse(data).word.capitalize() + '-' + Math.floor(Math.random * 999 + 1);
+        body.emit('update');
+    });
+}
+
+function adjectiveNoun() {
+    request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&includePartOfSpeech=adjective&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
+        body.bandName = JSON.parse(data).word.capitalize();
+        body.emit('subUpdate');
+    });
+    body.on('subUpdate', function() {
+        request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&includePartOfSpeech=noun&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
+            body.bandName += ' ' + JSON.parse(data).word.capitalize();
+            body.emit('update');
+        });
+    });
+}
+
 function generateBandName() {
     switch(Math.floor(Math.random() * ARCHETYPES)) {
         case 0:
@@ -71,11 +104,20 @@ function generateBandName() {
         case 3:
             nounsOfNoun();
             break;
+        case 4:
+            properNounTheNoun();
+            break;
+        case 5:
+            nounDashNumber();
+            break;
+        case 6:
+            adjectiveNoun();
+            break;
     }
 }
 
 function genre() {
-    var genres = ['acoustic', 'alternative', 'blues', 'country', 'electronic', 'hip-hop', 'neo-jazz', 'metal', 'pop', 'rock', 'rap', 'classical', 'folk', 'dubstep', 'crossover thrash', 'grunge', 'nu-wave', 'Christian rock', 'gospel', 'acid jazz', 'adult contemporary', 'neo-soul', 'Tex-Mex'];
+    var genres = ['acoustic', 'alternative', 'blues', 'country', 'electronic', 'hip-hop', 'neo-jazz', 'metal', 'pop', 'rock', 'rap', 'classical', 'folk', 'dubstep', 'crossover thrash', 'grunge', 'nu-wave', 'Christian rock', 'gospel', 'acid jazz', 'adult contemporary', 'neo-soul', 'Tex-Mex', 'dad-rock'];
     return genres[Math.floor(Math.random() * genres.length)];
 }
 
