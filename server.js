@@ -75,7 +75,7 @@ function generateBandName() {
 }
 
 function genre() {
-    var genres = ['acoustic', 'alternative', 'blues', 'country', 'electronic', 'hip-hop', 'neo-jazz', 'metal', 'pop', 'rock', 'rap'];
+    var genres = ['acoustic', 'alternative', 'blues', 'country', 'electronic', 'hip-hop', 'neo-jazz', 'metal', 'pop', 'rock', 'rap', 'classical', 'folk', 'dubstep', 'crossover thrash', 'grunge', 'nu-wave', 'Christian rock', 'gospel', 'acid jazz', 'adult contemporary', 'neo-soul', 'Tex-Mex'];
     return genres[Math.floor(Math.random() * genres.length)];
 }
 
