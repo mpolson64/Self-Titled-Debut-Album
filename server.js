@@ -2,6 +2,7 @@ var request = require('request');
 var EventEmitter = require('events').EventEmitter;
 
 const ARCHETYPES = 7;
+const MIN_DICTIONARY_COUNT = 4;
 
 const WORDNIK_API_KEY = process.env.WORDNIK_API_KEY;
 
@@ -12,19 +13,19 @@ String.prototype.capitalize = function() {
 var body = new EventEmitter();
 
 function theNouns() {
-    request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&includePartOfSpeech=noun-plural&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
+    request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=noun-plural' + '&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
         body.bandName= 'The ' + JSON.parse(data).word.capitalize();
         body.emit('update');
     });
 }
 
 function theAdjectiveNouns() {
-    request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&includePartOfSpeech=adjective&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
+    request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=adjective&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
         body.bandName = 'The ' + JSON.parse(data).word.capitalize();
         body.emit('subUpdate');
     });
     body.on('subUpdate', function() {
-        request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&includePartOfSpeech=noun-plural&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
+        request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=noun-plural&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
             body.bandName += ' ' + JSON.parse(data).word.capitalize();
             body.emit('update');
         });
@@ -32,12 +33,12 @@ function theAdjectiveNouns() {
 }
 
 function properNounAndTheNouns() {
-    request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&includePartOfSpeech=proper-noun&excludePartOfSpeach=proper-noun-plural&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
+    request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=proper-noun&excludePartOfSpeach=proper-noun-plural&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
         body.bandName = JSON.parse(data).word.capitalize();
         body.emit('subUpdate');
     });
     body.on('subUpdate', function() {
-        request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&includePartOfSpeech=noun-plural&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
+        request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=noun-plural&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
             body.bandName += ' and the ' + JSON.parse(data).word.capitalize();
             body.emit('update');
         });
@@ -45,12 +46,12 @@ function properNounAndTheNouns() {
 }
 
 function nounsOfNoun() {
-    request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&includePartOfSpeech=noun-plural&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
+    request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=noun-plural&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
         body.bandName = JSON.parse(data).word.capitalize();
         body.emit('subUpdate');
     });
     body.on('subUpdate', function() {
-        request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&includePartOfSpeech=noun&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
+        request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=noun&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
             body.bandName += ' of ' + JSON.parse(data).word.capitalize();
             body.emit('update');
         });
@@ -58,12 +59,12 @@ function nounsOfNoun() {
 }
 
 function properNounTheNoun() {
-    request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&includePartOfSpeech=proper-noun&excludePartOfSpeach=proper-noun-plural&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
+    request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=proper-noun&excludePartOfSpeach=proper-noun-plural&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
         body.bandName = JSON.parse(data).word.capitalize();
         body.emit('subUpdate');
     });
     body.on('subUpdate', function() {
-        request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&includePartOfSpeech=noun&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
+        request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=noun&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
             body.bandName += ' the ' + JSON.parse(data).word.capitalize();
             body.emit('update');
         });
@@ -71,19 +72,19 @@ function properNounTheNoun() {
 }
 
 function nounDashNumber() {
-    request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&includePartOfSpeech=proper-noun&excludePartOfSpeach=proper-noun-plural&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
+    request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=proper-noun&excludePartOfSpeach=proper-noun-plural&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
         body.bandName = JSON.parse(data).word.capitalize() + '-' + Math.floor(Math.random * 999 + 1);
         body.emit('update');
     });
 }
 
 function adjectiveNoun() {
-    request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&includePartOfSpeech=adjective&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
+    request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=adjective&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
         body.bandName = JSON.parse(data).word.capitalize();
         body.emit('subUpdate');
     });
     body.on('subUpdate', function() {
-        request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&includePartOfSpeech=noun&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
+        request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=noun&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
             body.bandName += ' ' + JSON.parse(data).word.capitalize();
             body.emit('update');
         });
