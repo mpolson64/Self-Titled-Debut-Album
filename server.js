@@ -122,8 +122,29 @@ function genre() {
     return genres[Math.floor(Math.random() * genres.length)];
 }
 
-generateBandName();
+function generateTweet() {
+    generateBandName();
+    body.on('update', function() {
+        switch(Math.floor(Math.random() * 4)) {
+            case 0:
+                body.tweet = 'Wow! Really excited to hear new ' + genre() + ' band ' + body.bandName + "'s self-titled debut album";
+                break;
+            case 1:
+                body.tweet = "I don't even like " + genre() + ' music, but ' + body.bandName + "'self-titled debut album is straight fire!";
+                break;
+            case 2:
+                body.tweet = body.bandName + "'s self-titled debut album just chaged the " + genre() + ' game forever';
+                break;
+            case 3:
+                body.tweet = 'Absolutely loving the ' + genre() + ' sounds on ' + body.bandName + "'s self-titled debut album";
+                break;
+        }
+        body.emit('finished');
+    });
+}
 
-body.on('update', function() {
-    console.log('New ' + genre() + ' band called ' + body.bandName);
+generateTweet();
+
+body.on('finished', function() {
+    console.log(body.tweet);
 });
