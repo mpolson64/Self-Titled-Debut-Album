@@ -4,7 +4,7 @@ var EventEmitter = require('events').EventEmitter;
 const ARCHETYPES = 7;
 const MIN_DICTIONARY_COUNT = 4;
 
-const WORDNIK_API_KEY = process.env.WORDNIK_API_KEY;
+const WORDNIK_API_KEY = process.env.WORDNI;
 
 String.prototype.capitalize = function() {
     return this.charAt(0).toUpperCase() + this.slice(1);
@@ -130,7 +130,7 @@ function generateTweet() {
                 body.tweet = 'Wow! Really excited to hear new ' + genre() + ' band ' + body.bandName + "'s self-titled debut album";
                 break;
             case 1:
-                body.tweet = "I don't even like " + genre() + ' music, but ' + body.bandName + "'self-titled debut album is straight fire!";
+                body.tweet = "I don't even like " + genre() + ' music, but ' + body.bandName + "'s self-titled debut album is straight fire!";
                 break;
             case 2:
                 body.tweet = body.bandName + "'s self-titled debut album just chaged the " + genre() + ' game forever';
