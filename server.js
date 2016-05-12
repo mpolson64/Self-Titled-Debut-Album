@@ -73,7 +73,7 @@ function properNounTheNoun() {
 
 function nounDashNumber() {
     request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=proper-noun&excludePartOfSpeach=proper-noun-plural&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
-        body.bandName = JSON.parse(data).word.capitalize() + '-' + Math.floor(Math.random * 999 + 1);
+        body.bandName = JSON.parse(data).word.capitalize() + '-' + Math.floor(Math.random() * 999 + 1);
         body.emit('update');
     });
 }
