@@ -98,13 +98,13 @@ function generateBandName() {
         },
         function() { //Verb the Noun (ex. Run the Jewels)
             var termPicker = Math.random() > 0.5;
-            request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=proper-noun&excludePartOfSpeach=proper-noun-plural&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
+            request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=verb&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
                 synchronizer.bandName = JSON.parse(data).word.capitalize();
                 if (termPicker) synchronizer.searchTerm = JSON.parse(data).word.capitalize();
                 synchronizer.emit('gotSubWord');
             });
             synchronizer.on('gotSubWord', function() {
-                request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=noun&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
+                request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=plural-noun&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
                     synchronizer.bandName += ' the ' + JSON.parse(data).word.capitalize();
                     if (!termPicker) synchronizer.searchTerm = JSON.parse(data).word.capitalize();
                     synchronizer.emit('gotWord');
