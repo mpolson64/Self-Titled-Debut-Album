@@ -124,7 +124,7 @@ function generateAlbumArt() {
     //Grabs the most recent image posted to Flickr tagged with the search term
     request('https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=' + FLICKR_API_KEY + '&tags=' + synchronizer.searchTerm + '&per_page=1&format=json&nojsoncallback=1', function(error, response, data) {
         setTimeout(function() {
-            svar photo = Math.floor(Math.random() * 100);
+            svar photo = Math.floor(Math.random() * JSON.parse(data).photos.photo.length);
             synchronizer.link = 'http://farm' + JSON.parse(data).photos.photo[photo].farm + '.staticflickr.com/' + JSON.parse(data).photos.photo[photo].server + '/' + JSON.parse(data).photos.photo[photo].id + '_' + JSON.parse(data).photos.photo[photo].secret + '.jpg';
             synchronizer.emit('downloaded');
         }, 500);
