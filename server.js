@@ -173,20 +173,22 @@ function generateAlbumArt() {
 //Generates band name and picks a genre, then puts them in a random tweet body archetype and creates album art
 function generateTweet() {
     generateBandName();
+    var tweets = [
+        function() {
+            synchronizer.tweet = 'Wow! Really excited to hear new ' + genre() + ' band ' + synchronizer.bandName + "'s self-titled debut album";
+        },
+        function() {
+            synchronizer.tweet = "I don't even like " + genre() + ' music, but ' + synchronizer.bandName + "'s self-titled debut album is straight fire!";
+        },
+        function() {
+            synchronizer.tweet = synchronizer.bandName + "'s self-titled debut album just chaged the " + genre() + ' game forever';
+        },
+        function() {
+            synchronizer.tweet = 'Absolutely loving the ' + genre() + ' sounds on ' + synchronizer.bandName + "'s self-titled debut album";
+        }
+    ];
     synchronizer.on('gotWord', function() {
-        switch (Math.floor(Math.random() * 4)) {
-            case 0:
-                synchronizer.tweet = 'Wow! Really excited to hear new ' + genre() + ' band ' + synchronizer.bandName + "'s self-titled debut album";
-                break;
-            case 1:
-                synchronizer.tweet = "I don't even like " + genre() + ' music, but ' + synchronizer.bandName + "'s self-titled debut album is straight fire!";
-                break;
-            case 2:
-                synchronizer.tweet = synchronizer.bandName + "'s self-titled debut album just chaged the " + genre() + ' game forever';
-                break;
-            case 3:
-                synchronizer.tweet = 'Absolutely loving the ' + genre() + ' sounds on ' + synchronizer.bandName + "'s self-titled debut album";
-                break;
+        tweets[Math.floor(Math.random() * tweets.length)]();
         }
         generateAlbumArt();
         synchronizer.on('artCreated', function() {
