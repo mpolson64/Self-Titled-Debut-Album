@@ -69,7 +69,7 @@ function generateBandName() {
             });
         },
         function() { //Noun-number (ex. Blink-182)
-            request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=proper-noun&excludePartOfSpeach=proper-noun-plural&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
+            request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=noun&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
                 synchronizer.searchTerm = JSON.parse(data).word.capitalize();
                 synchronizer.bandName = synchronizer.searchTerm + '-' + Math.floor(Math.random() * 999 + 1);
                 synchronizer.emit('gotWord');
@@ -84,6 +84,29 @@ function generateBandName() {
                 request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=noun&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
                     synchronizer.searchTerm = JSON.parse(data).word.capitalize();
                     synchronizer.bandName += ' ' + synchronizer.searchTerm;
+                    synchronizer.emit('gotWord');
+                });
+            });
+        },
+        function() { //Propper Noun Letter Letter Letter (ex. Charlie XCX)
+            const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=proper-noun&excludePartOfSpeach=proper-noun-plural&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
+                synchronizer.searchTerm = JSON.parse(data).word.capitalize();
+                synchronizer.bandName = synchronizer.searchTerm + ' ' + letters.charAt(Math.floor(Math.random() * letters.length)) + letters.charAt(Math.floor(Math.random() * letters.length)) + letters.charAt(Math.floor(Math.random() * letters.length));
+                synchronizer.emit('gotWord');
+            });
+        },
+        function() { //Verb the Noun (ex. Run the Jewels)
+            var termPicker = Math.random() > 0.5;
+            request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=proper-noun&excludePartOfSpeach=proper-noun-plural&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
+                synchronizer.bandName = JSON.parse(data).word.capitalize();
+                if (termPicker) synchronizer.searchTerm = JSON.parse(data).word.capitalize();
+                synchronizer.emit('gotSubWord');
+            });
+            synchronizer.on('gotSubWord', function() {
+                request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=noun&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
+                    synchronizer.bandName += ' the ' + JSON.parse(data).word.capitalize();
+                    if (!termPicker) synchronizer.searchTerm = JSON.parse(data).word.capitalize();
                     synchronizer.emit('gotWord');
                 });
             });
