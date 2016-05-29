@@ -116,7 +116,7 @@ function generateBandName() {
 }
 
 function genre() {
-    var genres = ['acoustic', 'alternative', 'blues', 'country', 'electronic', 'hip-hop', 'neo-jazz', 'metal', 'pop', 'rock', 'rap', 'classical', 'folk', 'dubstep', 'crossover thrash', 'grunge', 'nu-wave', 'Christian rock', 'gospel', 'adult contemporary', 'neo-soul', 'Tex-Mex', 'dad-rock'];
+    var genres = ['acoustic', 'alternative', 'blues', 'country', 'electronic', 'hip-hop', 'neo-jazz', 'metal', 'pop', 'rock', 'rap', 'classical', 'folk', 'dubstep', 'crossover thrash', 'grunge', 'nu-wave', 'Christian rock', 'gospel', 'adult contemporary', 'neo-soul', 'Tex-Mex', 'dad-rock', "rock 'n' roll", 'alt-rock', 'electronica', 'Naruto opening', 'R&B', 'synthpop', 'vaporwave', 'expirimental', 'trap', 'Atlanta rap'];
     return genres[Math.floor(Math.random() * genres.length)];
 }
 
@@ -185,6 +185,24 @@ function generateTweet() {
         },
         function() {
             synchronizer.tweet = 'Absolutely loving the ' + genre() + ' sounds on ' + synchronizer.bandName + "'s self-titled debut album";
+        },
+function() {
+            synchronizer.tweet = 'Go listen to ' + synchronizer.bandName + "'s self-titled debut into the " + genre() + ' game. Incredible.';
+        },
+        function() {
+            synchronizer.tweet = synchronizer.bandName + ' are keeping ' + genre() + ' alive with the fresh feel of their self-titled debut album'
+        },
+        function() {
+            synchronizer.tweet = "RT if you're refreshing Spotify right now so you can be the first to listen to " + synchronizer.bandName + "'s self-titled debut album";
+        },
+        function() {
+            synchronizer.tweet = 'If you even care a little about ' + genre() + ' at all you need to be listening to ' + synchronizer.bandName + "'s self-titled debut album";
+        },
+        function() {
+            synchronizer.tweet = 'SMASH THAT LIKE FOR ' + synchronizer.bandName.toUpperCase() + ' AND THEIR SELF-TITLED DEBUT ALBUM';
+        },
+        function() {
+            synchronizer.tweet = 'With their drummer finally out of prison ' + synchronizer.bandName + ' is finally ready to make their first offial dive into the ' + genre() + ' genre with their self-titled debut album';
         }
     ];
     synchronizer.on('gotWord', function() {
