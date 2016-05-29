@@ -5,7 +5,6 @@ var gm = require('gm').subClass({
     imageMagick: true
 });
 
-const ARCHETYPES = 7;
 const MIN_DICTIONARY_COUNT = 3;
 
 const WORDNIK_API_KEY = process.env.WORDNIK_API_KEY;
@@ -17,122 +16,81 @@ String.prototype.capitalize = function() {
 
 var synchronizer = new EventEmitter();
 
-function theNouns() {
-    request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=noun-plural' + '&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
-        synchronizer.searchTerm = JSON.parse(data).word.capitalize();
-        synchronizer.bandName = 'The ' + synchronizer.searchTerm;
-        synchronizer.emit('gotWord');
-    });
-}
-
-function theAdjectiveNouns() {
-    request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=adjective&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
-        synchronizer.bandName = 'The ' + JSON.parse(data).word.capitalize();
-        synchronizer.emit('gotSubWord');
-    });
-    synchronizer.on('gotSubWord', function() {
-        request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=noun-plural&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
+var nameGenerators = [
+   function() {     //The Nouns
+        request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=noun-plural' + '&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
             synchronizer.searchTerm = JSON.parse(data).word.capitalize();
-            synchronizer.bandName += ' ' + synchronizer.searchTerm;
+            synchronizer.bandName = 'The ' + synchronizer.searchTerm;
             synchronizer.emit('gotWord');
         });
-    });
-}
-
-function properNounAndTheNouns() {
-    var termPicker = Math.random() > 0.5;
-    request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=proper-noun&excludePartOfSpeach=proper-noun-plural&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
-        synchronizer.bandName = JSON.parse(data).word.capitalize();
-        if (termPicker) synchronizer.searchTerm = JSON.parse(data).word.capitalize();
-        synchronizer.emit('gotSubWord');
-    });
-    synchronizer.on('gotSubWord', function() {
+    },
+    function() {    //The Adjective Nouns
+        request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=adjective&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
+            synchronizer.bandName = 'The ' + JSON.parse(data).word.capitalize();
+            synchronizer.emit('gotSubWord');
+        });
+        synchronizer.on('gotSubWord', function() {
+            request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=noun-plural&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
+                synchronizer.searchTerm = JSON.parse(data).word.capitalize();
+                synchronizer.bandName += ' ' + synchronizer.searchTerm;
+                synchronizer.emit('gotWord');
+            });
+        });
+    },
+    function() {    //Nouns of Noun
+        var termPicker = Math.random() > 0.5;
         request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=noun-plural&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
-            synchronizer.bandName += ' and the ' + JSON.parse(data).word.capitalize();
-            if (!termPicker) synchronizer.searchTerm = JSON.parse(data).word.capitalize();
-            synchronizer.emit('gotWord');
+            synchronizer.bandName = JSON.parse(data).word.capitalize();
+            if (termPicker) synchronizer.searchTerm = JSON.parse(data).word.capitalize();
+            synchronizer.emit('gotSubWord');
         });
-    });
-}
-
-function nounsOfNoun() {
-    var termPicker = Math.random() > 0.5;
-    request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=noun-plural&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
-        synchronizer.bandName = JSON.parse(data).word.capitalize();
-        if (termPicker) synchronizer.searchTerm = JSON.parse(data).word.capitalize();
-        synchronizer.emit('gotSubWord');
-    });
-    synchronizer.on('gotSubWord', function() {
-        request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=noun&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
-            synchronizer.bandName += ' of ' + JSON.parse(data).word.capitalize();
-            if (!termPicker) synchronizer.searchTerm = JSON.parse(data).word.capitalize();
-            synchronizer.emit('gotWord');
+        synchronizer.on('gotSubWord', function() {
+            request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=noun&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
+                synchronizer.bandName += ' of ' + JSON.parse(data).word.capitalize();
+                if (!termPicker) synchronizer.searchTerm = JSON.parse(data).word.capitalize();
+                synchronizer.emit('gotWord');
+            });
         });
-    });
-}
-
-function properNounTheNoun() {
-    var termPicker = Math.random() > 0.5;
-    request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=proper-noun&excludePartOfSpeach=proper-noun-plural&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
-        synchronizer.bandName = JSON.parse(data).word.capitalize();
-        if (termPicker) synchronizer.searchTerm = JSON.parse(data).word.capitalize();
-        synchronizer.emit('gotSubWord');
-    });
-    synchronizer.on('gotSubWord', function() {
-        request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=noun&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
-            synchronizer.bandName += ' the ' + JSON.parse(data).word.capitalize();
-            if (!termPicker) synchronizer.searchTerm = JSON.parse(data).word.capitalize();
-            synchronizer.emit('gotWord');
+    },
+    function() {    //Proper Noun the Noun
+        var termPicker = Math.random() > 0.5;
+        request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=proper-noun&excludePartOfSpeach=proper-noun-plural&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
+            synchronizer.bandName = JSON.parse(data).word.capitalize();
+            if (termPicker) synchronizer.searchTerm = JSON.parse(data).word.capitalize();
+            synchronizer.emit('gotSubWord');
         });
-    });
-}
-
-function nounDashNumber() {
-    request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=proper-noun&excludePartOfSpeach=proper-noun-plural&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
-        synchronizer.searchTerm = JSON.parse(data).word.capitalize();
-        synchronizer.bandName = synchronizer.searchTerm + '-' + Math.floor(Math.random() * 999 + 1);
-        synchronizer.emit('gotWord');
-    });
-}
-
-function adjectiveNoun() {
-    request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=adjective&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
-        synchronizer.bandName = JSON.parse(data).word.capitalize();
-        synchronizer.emit('gotSubWord');
-    });
-    synchronizer.on('gotSubWord', function() {
-        request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=noun&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
+        synchronizer.on('gotSubWord', function() {
+            request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=noun&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
+                synchronizer.bandName += ' the ' + JSON.parse(data).word.capitalize();
+                if (!termPicker) synchronizer.searchTerm = JSON.parse(data).word.capitalize();
+                synchronizer.emit('gotWord');
+            });
+        });
+    },
+    function() {    //Noun-number
+        request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=proper-noun&excludePartOfSpeach=proper-noun-plural&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
             synchronizer.searchTerm = JSON.parse(data).word.capitalize();
-            synchronizer.bandName += ' ' + synchronizer.searchTerm;
+            synchronizer.bandName = synchronizer.searchTerm + '-' + Math.floor(Math.random() * 999 + 1);
             synchronizer.emit('gotWord');
         });
-    });
-}
+    },
+    function() {    //Adjective Noun
+        request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=adjective&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
+            synchronizer.bandName = JSON.parse(data).word.capitalize();
+            synchronizer.emit('gotSubWord');
+        });
+        synchronizer.on('gotSubWord', function() {
+            request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=noun&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
+                synchronizer.searchTerm = JSON.parse(data).word.capitalize();
+                synchronizer.bandName += ' ' + synchronizer.searchTerm;
+                synchronizer.emit('gotWord');
+            });
+        });
+    }
+];
 
 function generateBandName() {
-    switch (Math.floor(Math.random() * ARCHETYPES)) {
-        case 0:
-            theNouns();
-            break;
-        case 1:
-            theAdjectiveNouns();
-            break;
-        case 2:
-            properNounAndTheNouns();
-            break;
-        case 3:
-            nounsOfNoun();
-            break;
-        case 4:
-            properNounTheNoun();
-            break;
-        case 5:
-            nounDashNumber();
-            break;
-        case 6:
-            adjectiveNoun();
-            break;
-    }
+    nameGenerators[Math.floor(Math.random() * nameGenerators.length)]();
 }
 
 function genre() {
