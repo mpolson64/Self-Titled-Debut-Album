@@ -1,7 +1,10 @@
+const WORDNIK_API_KEY = process.env.WORDNIK_API_KEY;
+const FLICKR_API_KEY = process.env.FLICKR_API_KEY;
+
 var request = require('request');
 var EventEmitter = require('events').EventEmitter;
 var fs = require('fs');
-var gm = require('gm').subClass({   //Using ImageMagick to be compatible with Heroku
+var gm = require('gm').subClass({ //Using ImageMagick to be compatible with Heroku
     imageMagick: true
 });
 
@@ -122,12 +125,12 @@ function genre() {
 
 function generateAlbumArt() {
     //Grabs the most recent image posted to Flickr tagged with the search term
-    request('https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=' + FLICKR_API_KEY + '&tags=' + synchronizer.searchTerm + '&per_page=1&format=json&nojsoncallback=1', function(error, response, data) {
+    request('https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=' + FLICKR_API_KEY + '&tags=' + synchronizer.searchTerm + '&per_page=100&format=json&nojsoncallback=1', function(error, response, data) {
         setTimeout(function() {
-            svar photo = Math.floor(Math.random() * JSON.parse(data).photos.photo.length);
+            var photo = Math.floor(Math.random() * JSON.parse(data).photos.photo.length);
             synchronizer.link = 'http://farm' + JSON.parse(data).photos.photo[photo].farm + '.staticflickr.com/' + JSON.parse(data).photos.photo[photo].server + '/' + JSON.parse(data).photos.photo[photo].id + '_' + JSON.parse(data).photos.photo[photo].secret + '.jpg';
             synchronizer.emit('downloaded');
-        }, 500);
+        }, 600);
     });
 
     //Saves the image locally
@@ -147,27 +150,58 @@ function generateAlbumArt() {
                 synchronizer.midH = val.height / 2;
                 synchronizer.midW = val.width / 2;
             });
-            synchronizer.emit('sized');
+            synchronizer.emit('measured');
         }, 2000);
     });
 
     //Crops the image down to a square
-    synchronizer.on('sized', function() {
+    synchronizer.on('measured', function() {
         setTimeout(function() {
-            gm('original.jpg').crop(300, 300, synchronizer.midW - 150, synchronizer.midH - 150).write('resize.jpg', function(err) {});
-        }, 2000);
-        synchronizer.emit('ready');
+            gm('original.jpg').scale(synchronizer.midW * 2 * 1.5, synchronizer.midH * 2 * 1.5, '!').crop(500, 500, synchronizer.midW * 1.5 - 250, synchronizer.midH * 1.5 - 250).trim().scale(500, 500, '!').colorize((Math.floor(Math.random() * 30)), (Math.floor(Math.random() * 30)), (Math.floor(Math.random() * 30))).contrast(Math.floor(Math.random() * 40) - 20).despeckle().write('edit.jpg', function(err) {});
+        }, 2500);
+        synchronizer.emit('edited');
     });
 
     //Writes the band name on the album and deletes temporary image files
-    synchronizer.on('ready', function() {
-        setTimeout(function() {
-            gm('resize.jpg').trim().fontSize(42).stroke('white').drawText(50, 50, synchronizer.bandName).write('finished.jpg', function(err) {
-                synchronizer.emit('artCreated');
-                fs.unlinkSync('original.jpg');
-                fs.unlinkSync('resize.jpg');
-            });
-        }, 3000);
+    synchronizer.on('edited', function() {
+        function webSafeHex() {
+            var out = (Math.floor(Math.random() * 6) * 51).toString(16);
+            if (out.length != 1) {
+                return out;
+            } else {
+                return '0' + out;
+            }
+        }
+        var color = '#' + webSafeHex() + webSafeHex() + webSafeHex();
+        console.log(color);
+        var topLeft = [Math.floor(Math.random() * 80) + 20, Math.floor(Math.random() * 300) + 20];
+        console.log(topLeft);
+        console.log(topLeft);
+        var words = synchronizer.bandName.split(' ');
+        if (synchronizer.bandName.length < 10 || words.length == 1) {
+            setTimeout(function() {
+                gm('edit.jpg').trim().fontSize(60).stroke(color).fill(color).drawText(topLeft[0], topLeft[1], synchronizer.bandName).write('finished.jpg', function(err) {
+                    synchronizer.emit('artCreated');
+                    fs.unlinkSync('original.jpg');
+                    fs.unlinkSync('edit.jpg');
+                });
+            }, 3000);
+        } else {
+            if (words[0].length < 5) {
+                var topWords = words[0] + ' ' + words[1];
+            } else {
+                var topWords = words[0];
+            }
+            var botWords = synchronizer.bandName.slice(topWords.length);
+            setTimeout(function() {
+                gm('edit.jpg').trim().fontSize(60).stroke(color).fill(color).drawText(topLeft[0], topLeft[1], topWords).drawText(topLeft[0], topLeft[1] + 70, botWords).write('finished.jpg', function(err) {
+                    synchronizer.emit('artCreated');
+                    fs.unlinkSync('original.jpg');
+                    fs.unlinkSync('edit.jpg');
+                });
+            }, 3000);
+        }
+        synchronizer.emit('written');
     });
 }
 
@@ -187,7 +221,7 @@ function generateTweet() {
         function() {
             synchronizer.tweet = 'Absolutely loving the ' + genre() + ' sounds on ' + synchronizer.bandName + "'s self-titled debut album";
         },
-function() {
+        function() {
             synchronizer.tweet = 'Go listen to ' + synchronizer.bandName + "'s self-titled debut into the " + genre() + ' game. Incredible.';
         },
         function() {
@@ -208,7 +242,6 @@ function() {
     ];
     synchronizer.on('gotWord', function() {
         tweets[Math.floor(Math.random() * tweets.length)]();
-        }
         generateAlbumArt();
         synchronizer.on('artCreated', function() {
             synchronizer.emit('finished');
