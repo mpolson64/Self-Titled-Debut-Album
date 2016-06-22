@@ -1,7 +1,7 @@
 {
   "name": "self-titled-debut-album",
-  "version": "0.0.0",
-  "description": "A twitter bot that generates a random band name.",
+  "version": "1.0.0",
+  "description": "A twitter bot that generates a random band name. Follow me @SelfTitledDebutAlbum",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
