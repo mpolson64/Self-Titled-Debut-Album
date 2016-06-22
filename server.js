@@ -133,7 +133,7 @@ function generateTweet() {
     generateBandName();
     var tweets = [
         function() {
-            synchronizer.tweet = 'Wow! Really excited to hear new ' + genre() + ' band ' + synchronizer.bandName + "'s self-titled debut album";
+            synchronizer.tweet = 'Wow! Really excited to hear the new ' + genre() + ' music on ' + synchronizer.bandName + "'s self-titled debut album";
         },
         function() {
             synchronizer.tweet = "I don't even like " + genre() + ' music, but ' + synchronizer.bandName + "'s self-titled debut album is straight fire!";
@@ -148,7 +148,7 @@ function generateTweet() {
             synchronizer.tweet = 'Go listen to ' + synchronizer.bandName + "'s self-titled debut into the " + genre() + ' game. Incredible.';
         },
         function() {
-            synchronizer.tweet = synchronizer.bandName + ' are keeping ' + genre() + ' alive with the fresh feel of their self-titled debut album'
+            synchronizer.tweet = synchronizer.bandName + "'s keeping " + genre() + ' alive with the fresh feel of their self-titled debut album'
         },
         function() {
             synchronizer.tweet = "RT if you're refreshing Spotify right now so you can be the first to listen to " + synchronizer.bandName + "'s self-titled debut album";
