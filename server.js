@@ -2,6 +2,7 @@ var request = require('request');
 var EventEmitter = require('events').EventEmitter;
 var Twit = require('twit');
 
+const DEBUGGING = false;
 const INTERVAL = 1000 * 60 * 2;	//Time inbetween tweets (in miliseconds)
 const MIN_DICTIONARY_COUNT = 3; //Controls the likelyhood of rare words
 
@@ -212,7 +213,7 @@ function generateTweet() {
     ];
     synchronizer.on('gotWord', function() {
         tweets[Math.floor(Math.random() * tweets.length)]();
-        if(!debugging){
+        if(!DEBUGGING){
             T.post('statuses/update', {status: synchronizer.tweet}, function(err, data, response) {
                 console.log(data);
             });
