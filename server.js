@@ -3,7 +3,7 @@ var EventEmitter = require('events').EventEmitter;
 var Twit = require('twit');
 
 const DEBUGGING = false;
-const INTERVAL = 1000 * 60 * 2;	//Time inbetween tweets (in miliseconds)
+const INTERVAL = 1000 * 60 * 60 * 2;	//Time inbetween tweets (in miliseconds)
 const MIN_DICTIONARY_COUNT = 3; //Controls the likelyhood of rare words
 
 const WORDNIK_API_KEY = process.env.WORDNIK_API_KEY;
