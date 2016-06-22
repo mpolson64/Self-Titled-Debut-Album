@@ -1,30 +1,35 @@
-const WORDNIK_API_KEY = process.env.WORDNIK_API_KEY;
-const FLICKR_API_KEY = process.env.FLICKR_API_KEY;
-
 var request = require('request');
 var EventEmitter = require('events').EventEmitter;
-var fs = require('fs');
-var gm = require('gm').subClass({ //Using ImageMagick to be compatible with Heroku
-    imageMagick: true
-});
+var Twit = require('twit');
 
+const INTERVAL = 1000 * 60 * 2;	//Time inbetween tweets (in miliseconds)
 const MIN_DICTIONARY_COUNT = 3; //Controls the likelyhood of rare words
 
 const WORDNIK_API_KEY = process.env.WORDNIK_API_KEY;
-const FLICKR_API_KEY = process.env.FLICKR_API_KEY;
+const TWITTER_API_KEY = process.env.TWITTER_API_KEY;
+const TWITTER_API_SECRET = process.env.TWITTER_API_SECRET;
+const TWITTER_ACCESS_TOKEN = process.env.TWITTER_ACCESS_TOKEN;
+const TWITTER_ACCESS_SECRET = process.env.TWITTER_ACCESS_SECRET;
 
 String.prototype.capitalize = function() {
     return this.charAt(0).toUpperCase() + this.slice(1);
 }
 
 var synchronizer = new EventEmitter();
+var T = new Twit({
+    consumer_key:         TWITTER_API_KEY,
+    consumer_secret:      TWITTER_API_SECRET,
+    access_token:         TWITTER_ACCESS_TOKEN,
+    access_token_secret:  TWITTER_ACCESS_SECRET,
+    timeout_ms:           60 * 1000  // optional HTTP request timeout to apply to all requests.
+});
 
 function generateBandName() {
     var nameGenerators = [
         function() { //The Nouns (ex. The Beatles)
             request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=noun-plural' + '&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
-                synchronizer.searchTerm = JSON.parse(data).word.capitalize();
-                synchronizer.bandName = 'The ' + synchronizer.searchTerm;
+                synchronizer.keyword = JSON.parse(data).word.capitalize();
+                synchronizer.bandName = 'The ' + synchronizer.keyword;
                 synchronizer.emit('gotWord');
             });
         },
@@ -35,8 +40,8 @@ function generateBandName() {
             });
             synchronizer.on('gotSubWord', function() {
                 request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=noun-plural&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
-                    synchronizer.searchTerm = JSON.parse(data).word.capitalize();
-                    synchronizer.bandName += ' ' + synchronizer.searchTerm;
+                    synchronizer.keyword = JSON.parse(data).word.capitalize();
+                    synchronizer.bandName += ' ' + synchronizer.keyword;
                     synchronizer.emit('gotWord');
                 });
             });
@@ -45,13 +50,13 @@ function generateBandName() {
             var termPicker = Math.random() > 0.5;
             request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=noun-plural&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
                 synchronizer.bandName = JSON.parse(data).word.capitalize();
-                if (termPicker) synchronizer.searchTerm = JSON.parse(data).word.capitalize();
+                if (termPicker) synchronizer.keyword = JSON.parse(data).word.capitalize();
                 synchronizer.emit('gotSubWord');
             });
             synchronizer.on('gotSubWord', function() {
                 request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=noun&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
                     synchronizer.bandName += ' of ' + JSON.parse(data).word.capitalize();
-                    if (!termPicker) synchronizer.searchTerm = JSON.parse(data).word.capitalize();
+                    if (!termPicker) synchronizer.keyword = JSON.parse(data).word.capitalize();
                     synchronizer.emit('gotWord');
                 });
             });
@@ -60,21 +65,21 @@ function generateBandName() {
             var termPicker = Math.random() > 0.5;
             request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=proper-noun&excludePartOfSpeach=proper-noun-plural&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
                 synchronizer.bandName = JSON.parse(data).word.capitalize();
-                if (termPicker) synchronizer.searchTerm = JSON.parse(data).word.capitalize();
+                if (termPicker) synchronizer.keyword = JSON.parse(data).word.capitalize();
                 synchronizer.emit('gotSubWord');
             });
             synchronizer.on('gotSubWord', function() {
                 request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=noun&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
                     synchronizer.bandName += ' the ' + JSON.parse(data).word.capitalize();
-                    if (!termPicker) synchronizer.searchTerm = JSON.parse(data).word.capitalize();
+                    if (!termPicker) synchronizer.keyword = JSON.parse(data).word.capitalize();
                     synchronizer.emit('gotWord');
                 });
             });
         },
         function() { //Noun-number (ex. Blink-182)
             request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=noun&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
-                synchronizer.searchTerm = JSON.parse(data).word.capitalize();
-                synchronizer.bandName = synchronizer.searchTerm + '-' + Math.floor(Math.random() * 999 + 1);
+                synchronizer.keyword = JSON.parse(data).word.capitalize();
+                synchronizer.bandName = synchronizer.keyword + '-' + Math.floor(Math.random() * 999 + 1);
                 synchronizer.emit('gotWord');
             });
         },
@@ -85,8 +90,8 @@ function generateBandName() {
             });
             synchronizer.on('gotSubWord', function() {
                 request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=noun&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
-                    synchronizer.searchTerm = JSON.parse(data).word.capitalize();
-                    synchronizer.bandName += ' ' + synchronizer.searchTerm;
+                    synchronizer.keyword = JSON.parse(data).word.capitalize();
+                    synchronizer.bandName += ' ' + synchronizer.keyword;
                     synchronizer.emit('gotWord');
                 });
             });
@@ -94,8 +99,8 @@ function generateBandName() {
         function() { //Propper Noun Letter Letter Letter (ex. Charlie XCX)
             const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
             request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=proper-noun&excludePartOfSpeach=proper-noun-plural&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
-                synchronizer.searchTerm = JSON.parse(data).word.capitalize();
-                synchronizer.bandName = synchronizer.searchTerm + ' ' + letters.charAt(Math.floor(Math.random() * letters.length)) + letters.charAt(Math.floor(Math.random() * letters.length)) + letters.charAt(Math.floor(Math.random() * letters.length));
+                synchronizer.keyword = JSON.parse(data).word.capitalize();
+                synchronizer.bandName = synchronizer.keyword + ' ' + letters.charAt(Math.floor(Math.random() * letters.length)) + letters.charAt(Math.floor(Math.random() * letters.length)) + letters.charAt(Math.floor(Math.random() * letters.length));
                 synchronizer.emit('gotWord');
             });
         },
@@ -103,13 +108,13 @@ function generateBandName() {
             var termPicker = Math.random() > 0.5;
             request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=verb&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
                 synchronizer.bandName = JSON.parse(data).word.capitalize();
-                if (termPicker) synchronizer.searchTerm = JSON.parse(data).word.capitalize();
+                if (termPicker) synchronizer.keyword = JSON.parse(data).word.capitalize();
                 synchronizer.emit('gotSubWord');
             });
             synchronizer.on('gotSubWord', function() {
                 request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=plural-noun&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
                     synchronizer.bandName += ' the ' + JSON.parse(data).word.capitalize();
-                    if (!termPicker) synchronizer.searchTerm = JSON.parse(data).word.capitalize();
+                    if (!termPicker) synchronizer.keyword = JSON.parse(data).word.capitalize();
                     synchronizer.emit('gotWord');
                 });
             });
@@ -121,88 +126,6 @@ function generateBandName() {
 function genre() {
     var genres = ['acoustic', 'alternative', 'blues', 'country', 'electronic', 'hip-hop', 'neo-jazz', 'metal', 'pop', 'rock', 'rap', 'classical', 'folk', 'dubstep', 'crossover thrash', 'grunge', 'nu-wave', 'Christian rock', 'gospel', 'adult contemporary', 'neo-soul', 'Tex-Mex', 'dad-rock', "rock 'n' roll", 'alt-rock', 'electronica', 'Naruto opening', 'R&B', 'synthpop', 'vaporwave', 'expirimental', 'trap', 'Atlanta rap'];
     return genres[Math.floor(Math.random() * genres.length)];
-}
-
-function generateAlbumArt() {
-    //Grabs the most recent image posted to Flickr tagged with the search term
-    request('https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=' + FLICKR_API_KEY + '&tags=' + synchronizer.searchTerm + '&per_page=100&format=json&nojsoncallback=1', function(error, response, data) {
-        setTimeout(function() {
-            var photo = Math.floor(Math.random() * JSON.parse(data).photos.photo.length);
-            synchronizer.link = 'http://farm' + JSON.parse(data).photos.photo[photo].farm + '.staticflickr.com/' + JSON.parse(data).photos.photo[photo].server + '/' + JSON.parse(data).photos.photo[photo].id + '_' + JSON.parse(data).photos.photo[photo].secret + '.jpg';
-            synchronizer.emit('downloaded');
-        }, 600);
-    });
-
-    //Saves the image locally
-    synchronizer.on('downloaded', function() {
-        request(synchronizer.link, {
-            encoding: 'binary'
-        }, function(error, response, body) {
-            fs.writeFile('original.jpg', body, 'binary', function(err) {});
-            synchronizer.emit('saved');
-        });
-    });
-
-    //Measures the image for resizing later (must be its own step because it takes time)
-    synchronizer.on('saved', function() {
-        setTimeout(function() {
-            gm('original.jpg').size(function(err, val) {
-                synchronizer.midH = val.height / 2;
-                synchronizer.midW = val.width / 2;
-            });
-            synchronizer.emit('measured');
-        }, 2000);
-    });
-
-    //Crops the image down to a square
-    synchronizer.on('measured', function() {
-        setTimeout(function() {
-            gm('original.jpg').scale(synchronizer.midW * 2 * 1.5, synchronizer.midH * 2 * 1.5, '!').crop(500, 500, synchronizer.midW * 1.5 - 250, synchronizer.midH * 1.5 - 250).trim().scale(500, 500, '!').colorize((Math.floor(Math.random() * 30)), (Math.floor(Math.random() * 30)), (Math.floor(Math.random() * 30))).contrast(Math.floor(Math.random() * 40) - 20).despeckle().write('edit.jpg', function(err) {});
-        }, 2500);
-        synchronizer.emit('edited');
-    });
-
-    //Writes the band name on the album and deletes temporary image files
-    synchronizer.on('edited', function() {
-        function webSafeHex() {
-            var out = (Math.floor(Math.random() * 6) * 51).toString(16);
-            if (out.length != 1) {
-                return out;
-            } else {
-                return '0' + out;
-            }
-        }
-        var color = '#' + webSafeHex() + webSafeHex() + webSafeHex();
-        console.log(color);
-        var topLeft = [Math.floor(Math.random() * 80) + 20, Math.floor(Math.random() * 300) + 20];
-        console.log(topLeft);
-        console.log(topLeft);
-        var words = synchronizer.bandName.split(' ');
-        if (synchronizer.bandName.length < 10 || words.length == 1) {
-            setTimeout(function() {
-                gm('edit.jpg').trim().fontSize(60).stroke(color).fill(color).drawText(topLeft[0], topLeft[1], synchronizer.bandName).write('finished.jpg', function(err) {
-                    synchronizer.emit('artCreated');
-                    fs.unlinkSync('original.jpg');
-                    fs.unlinkSync('edit.jpg');
-                });
-            }, 3000);
-        } else {
-            if (words[0].length < 5) {
-                var topWords = words[0] + ' ' + words[1];
-            } else {
-                var topWords = words[0];
-            }
-            var botWords = synchronizer.bandName.slice(topWords.length);
-            setTimeout(function() {
-                gm('edit.jpg').trim().fontSize(60).stroke(color).fill(color).drawText(topLeft[0], topLeft[1], topWords).drawText(topLeft[0], topLeft[1] + 70, botWords).write('finished.jpg', function(err) {
-                    synchronizer.emit('artCreated');
-                    fs.unlinkSync('original.jpg');
-                    fs.unlinkSync('edit.jpg');
-                });
-            }, 3000);
-        }
-        synchronizer.emit('written');
-    });
 }
 
 //Generates band name and picks a genre, then puts them in a random tweet body archetype and creates album art
@@ -242,15 +165,12 @@ function generateTweet() {
     ];
     synchronizer.on('gotWord', function() {
         tweets[Math.floor(Math.random() * tweets.length)]();
-        generateAlbumArt();
-        synchronizer.on('artCreated', function() {
-            synchronizer.emit('finished');
+        synchronizer.emit('finished');
+        T.post('statuses/update', {status: synchronizer.tweet}, function(err, data, response) {
+            console.log(data); 
         });
     });
 }
 
 generateTweet();
-
-synchronizer.on('finished', function() {
-    console.log(synchronizer.tweet);
-});
+setInterval(generateTweet, INTERVAL);
