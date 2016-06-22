@@ -174,7 +174,7 @@ function generateTweet() {
             synchronizer.tweet = 'ATTENTION ' + genre().toUpperCase() + ' ARTISTS: There is no need to make music anymore; ' + synchronizer.bandName + ' has perfected it on their self-titled debut album';
         },
         function() {
-            synchronizer.tweet = 'dont even read the reviews on ' + synchronizer.bandName.toLowerCase() + '. every single ' + genre() + ' fan knows its a 10';
+            synchronizer.tweet = 'dont even read the reviews on ' + synchronizer.bandName.toLowerCase() + '. every single ' + genre() + ' fan knows its a ' + Math.floor(Math.random() * 11);
         },
         function() {
             synchronizer.tweet = genre().capitalize() + ' fans rejoice! ' + synchronizer.bandName + ' singlehandedly saved the genre with their self-titled debut album';
