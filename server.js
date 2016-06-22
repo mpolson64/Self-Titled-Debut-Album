@@ -161,14 +161,65 @@ function generateTweet() {
         },
         function() {
             synchronizer.tweet = 'With their drummer finally out of prison ' + synchronizer.bandName + ' is finally ready to make their first offial dive into the ' + genre() + ' genre with their self-titled debut album';
+        },
+        function() {
+            var regions = ['a North American', 'a South American', 'a European', 'an Australian', 'an Asian', 'an Antarctic', 'a US (+Canadian)'];
+            synchronizer.tweet = synchronizer.bandName + ' has finally announced ' + regions[Math.floor(Math.random() * regions.length)] + ' tour following their wildly successful self-titled debut album';
+        },
+        function() {
+            synchronizer.tweet = 'Falling in love with ' + genre() + ' again thanks to ' + synchronizer.bandName + "'s self-titled debut album'";
+        },
+        function() {
+            synchronizer.tweet = 'ATTENTION ' + genre().toUpperCase() + ' ARTISTS: There is no need to make music anymore; ' + synchronizer.bandName + ' has perfected it on their self-titled debut album';
+        },
+        function() {
+            synchronizer.tweet = 'dont even read the reviews on ' + synchronizer.bandName.toLowerCase() + '. every single ' + genre() + ' fan knows its a 10';
+        },
+        function() {
+            synchronizer.tweet = genre().capitalize() + ' fans rejoice! ' + synchronizer.bandName + ' singlehandedly saved the genre with their self-titled debut album';
+        },
+        function() {
+            synchronizer.tweet = "I did not know you could sample Desiigner's Panda in " + genre() + ' but ' + synchronizer.bandName + ' proved me wrong in their lead single off their self-titled debut album';
+        },
+        function() {
+            function makeDay() {
+                var date = new Date();
+                var temp = date.getDate();
+
+                temp = (temp + 10) % 28;    //Assures the date is possible
+
+                if(temp.toString().charAt(temp.toString().length - 1) == 1) {
+                    temp += 'st';
+                }
+                else if(temp.toString().charAt(temp.toString().length - 1) == 2) {
+                    temp += 'nd';
+                }
+                else if(temp.toString().charAt(temp.toString().length - 1) == 3) {
+                    temp += 'rd';
+                }
+                else {
+                    temp += 'th';
+                }
+
+                return temp;
+            }
+
+            synchronizer.tweet = 'Mark your calendars ' + genre() + ' fans because ' + synchronizer.bandName + ' is dropping their self-titled debut album on the ' + makeDay();
+        },
+        function() {
+            synchronizer.tweet = "There's no date yet, but " + synchronizer.bandName + "'s promissing " + genre() + ' fans their self-titled debut album WILL be coming this year';
         }
     ];
     synchronizer.on('gotWord', function() {
         tweets[Math.floor(Math.random() * tweets.length)]();
-        synchronizer.emit('finished');
-        T.post('statuses/update', {status: synchronizer.tweet}, function(err, data, response) {
-            console.log(data); 
-        });
+        if(!debugging){
+            T.post('statuses/update', {status: synchronizer.tweet}, function(err, data, response) {
+                console.log(data);
+            });
+        }
+        else {
+            console.log(synchronizer.tweet);
+        }
     });
 }
 
