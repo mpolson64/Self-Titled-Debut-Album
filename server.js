@@ -239,6 +239,6 @@ var doIt = function() {
     });
 }
 
-setInterval(generateBandName, 1000);
-doIt();
+generateBandName();
+setInterval(doIt, 1000);
 setInterval(doIt, INTERVAL);
