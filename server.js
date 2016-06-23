@@ -240,5 +240,5 @@ var doIt = function() {
 }
 
 generateBandName();
-setInterval(doIt, 1000);
+setTimeout(doIt, 1000);
 setInterval(doIt, INTERVAL);
