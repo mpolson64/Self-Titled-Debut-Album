@@ -214,7 +214,7 @@ function generateTweet() {
             tweet = 'I know we say everything is game-changing but ' + bandName + "'s self-titled debut album is legit rocking the " + genre() + ' boat';
         },
         function() {
-            tweet = 'I know for a fact the ' + genre() + ' guys are going to be remixing the hell out of the ' + genre() + ' sounds on ' + bandName + "'self-titled debut album";
+            tweet = 'I know for a fact the ' + genre() + ' guys are going to be remixing the hell out of the ' + genre() + ' sounds on ' + bandName + "'s self-titled debut album";
         },
         function() {
             var feelings = ['happiness', 'love', 'kindness', 'forgiveness', 'greif', 'revenge', 'hatred', 'anger', 'depression', 'lonliness', 'rejection', 'acceptance', 'self-affirmation', 'doubt'];
