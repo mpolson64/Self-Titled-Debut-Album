@@ -1,8 +1,7 @@
 var request = require('request');
 var Twit = require('twit');
 
-const DEBUGGING = process.env.DEBUGGING;
-const INTERVAL = process.env.INTERVAL;	//Time inbetween tweets (in miliseconds)
+const INTERVAL = process.env.INTERVAL; //Time inbetween tweets (in miliseconds)
 const WORDNIK_TIMEOUT = process.env.WORDNIK_TIMEOUT;
 const MIN_DICTIONARY_COUNT = process.env.MIN_DICTIONARY_COUNT; //Controls the likelyhood of rare words
 
@@ -233,16 +232,11 @@ function generateTweet() {
 
 var doIt = function() {
     generateTweet();
-    if (!DEBUGGING) {
-        T.post('statuses/update', {
-            status: tweet
-        }, function(err, data, response) {
-            console.log(data);
-        });
-    } else {
-        console.log(tweet);
-        console.log(tweet.length);
-    }
+    T.post('statuses/update', {
+        status: tweet
+    }, function(err, data, response) {
+        console.log(data);
+    });
 }
 
 generateBandName();
