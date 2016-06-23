@@ -219,6 +219,7 @@ var doIt = function() {
         });
     } else {
         console.log(tweet);
+        console.log(tweet.length);
     }
 }
 
