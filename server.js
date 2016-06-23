@@ -204,6 +204,28 @@ function generateTweet() {
         },
         function() {
             tweet = "There's no date yet, but " + bandName + "'s promissing " + genre() + ' fans their self-titled debut album WILL be coming this year';
+        },
+        function() {
+            tweet = 'DM me if you have tickets to the ' + bandName + " show. I can't get their " + genre() + ' sound out of my head after their self-titled debut album';
+        },
+        function() {
+            tweet = "If you've got a spare $" + Math.floor(Math.random() * 20 + 1) + ' and like ' + genre() + ' consider picking up ' + bandName + "'s self-titled debut album";
+        },
+        function() {
+            tweet = 'I know we say everything is game-changing but ' + bandName + "'s self-titled debut album is legit rocking the " + genre() + ' boat';
+        },
+        function() {
+            tweet = 'I know for a fact the ' + genre() + ' guys are going to be remixing the hell out of the ' + genre() + ' sounds on ' + bandName + "'self-titled debut album";
+        },
+        function() {
+            var feelings = ['happiness', 'love', 'kindness', 'forgiveness', 'greif', 'revenge', 'hatred', 'anger', 'depression', 'lonliness', 'rejection', 'acceptance', 'self-affirmation', 'doubt'];
+            tweet = "It's all about " + feelings[Math.floor(Math.random() * feelings.length)] + ' on ' + bandName + "'s self-titled debut album";
+        },
+        function() {
+            tweet = "If you're a " + genre() + " boy you'd better have listened to the new self-titled debut album from " + bandName;
+        },
+        function() {
+            tweet = "This isn't a reissue, this isn't a remaster, this is a fresh new " + genre() + ' album! Do yourself a favor and check out ' + bandName + "'s self-titled debut album";
         }
     ];
     tweets[Math.floor(Math.random() * tweets.length)]();
