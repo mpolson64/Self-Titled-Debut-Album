@@ -166,7 +166,7 @@ function generateTweet() {
             tweet = bandName + ' has finally announced ' + regions[Math.floor(Math.random() * regions.length)] + ' tour following their wildly successful self-titled debut album';
         },
         function() {
-            tweet = 'Falling in love with ' + genre() + ' again thanks to ' + bandName + "'s self-titled debut album'";
+            tweet = 'Falling in love with ' + genre() + ' again thanks to ' + bandName + "'s self-titled debut album";
         },
         function() {
             tweet = 'ATTENTION ' + genre().toUpperCase() + ' ARTISTS: There is no need to make music anymore; ' + bandName + ' has perfected it on their self-titled debut album';
