@@ -178,7 +178,7 @@ function generateTweet() {
             tweet = genre().capitalize() + ' fans rejoice! ' + bandName + ' singlehandedly saved the genre with their self-titled debut album';
         },
         function() {
-            tweet = "I did not know you could sample Desiigner's Panda in " + genre() + ' but ' + bandName + ' proved me wrong in their lead single off their self-titled debut album';
+            tweet = "I didn't know you could sample Desiigner's Panda in " + genre() + ' but ' + bandName + ' proved me wrong in their lead single off their self-titled debut album';
         },
         function() {
             function makeDay() {
@@ -209,7 +209,7 @@ function generateTweet() {
             tweet = 'DM me if you have tickets to the ' + bandName + " show. I can't get their " + genre() + ' sound out of my head after their self-titled debut album';
         },
         function() {
-            tweet = "If you've got a spare $" + Math.floor(Math.random() * 20 + 1) + ' and like ' + genre() + ' consider picking up ' + bandName + "'s self-titled debut album";
+            tweet = "If you've got a spare $" + Math.floor(Math.random() * 20 + 1) + ' and like ' + genre() + ' def pick up ' + bandName + "'s self-titled debut album";
         },
         function() {
             tweet = 'I know we say everything is game-changing but ' + bandName + "'s self-titled debut album is legit rocking the " + genre() + ' boat';
@@ -225,7 +225,7 @@ function generateTweet() {
             tweet = "If you're a " + genre() + " boy you'd better have listened to the new self-titled debut album from " + bandName;
         },
         function() {
-            tweet = "This isn't a reissue, this isn't a remaster, this is a fresh new " + genre() + ' album! Do yourself a favor and check out ' + bandName + "'s self-titled debut album";
+            tweet = "This isn't a reissue or a remaster, this is a fresh new " + genre() + ' album! Do yourself a favor and check out ' + bandName + "'s self-titled debut album";
         }
     ];
     tweets[Math.floor(Math.random() * tweets.length)]();
