@@ -3,8 +3,8 @@ var Twit = require('twit');
 
 const DEBUGGING = process.env.DEBUGGING;
 const INTERVAL = process.env.INTERVAL;	//Time inbetween tweets (in miliseconds)
-const MIN_DICTIONARY_COUNT = 3; //Controls the likelyhood of rare words
-const WORDNIK_TIMEOUT = 500;
+const WORDNIK_TIMEOUT = process.env.WORDNIK_TIMEOUT;
+const MIN_DICTIONARY_COUNT = process.env.MIN_DICTIONARY_COUNT; //Controls the likelyhood of rare words
 
 const WORDNIK_API_KEY = process.env.WORDNIK_API_KEY;
 const TWITTER_API_KEY = process.env.TWITTER_API_KEY;
