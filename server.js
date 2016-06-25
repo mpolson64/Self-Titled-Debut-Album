@@ -218,7 +218,7 @@ function generateTweet() {
         },
         function() {
             var feelings = ['happiness', 'love', 'kindness', 'forgiveness', 'greif', 'revenge', 'hatred', 'anger', 'depression', 'lonliness', 'rejection', 'acceptance', 'self-affirmation', 'doubt'];
-            tweet = "It's all about " + feelings[Math.floor(Math.random() * feelings.length)] + ' on ' + bandName + "'s self-titled debut album";
+            tweet = "It's all about " + feelings[Math.floor(Math.random() * feelings.length)] + ' on ' + bandName + "'s self-titled debut into " + genre();
         },
         function() {
             tweet = "If you're a " + genre() + " boy you'd better have listened to the new self-titled debut album from " + bandName;
