@@ -120,7 +120,7 @@ function generateBandName() {
 }
 
 function genre() {
-    var genres = ['acoustic', 'alternative', 'blues', 'country', 'electronic', 'hip-hop', 'neo-jazz', 'metal', 'pop', 'rock', 'rap', 'classical', 'folk', 'dubstep', 'crossover thrash', 'grunge', 'nu-wave', 'Christian rock', 'gospel', 'adult contemporary', 'neo-soul', 'Tex-Mex', 'dad-rock', "rock 'n' roll", 'alt-rock', 'electronica', 'J-Pop', 'R&B', 'synthpop', 'vaporwave', 'expirimental', 'trap', 'Atlanta rap', 'cloud rap', 'deep house', 'house', 'future-funk', 'electro-funk', 'funk', 'chillwave', 'EDM', 'IDM', 'nightcore', 'disco', 'gangsta rap', 'drill', 'old skool hip-hop', 'eurobeat', 'dream pop', 'psych rock', 'psych pop', 'shoegaze', 'nu-metal', 'black metal', 'dance pop'];
+    var genres = ['acoustic', 'alternative', 'blues', 'country', 'electronic', 'hip-hop', 'neo-jazz', 'metal', 'pop', 'rock', 'rap', 'classical', 'folk', 'dubstep', 'crossover-thrash', 'grunge', 'nu-wave', 'Christian-rock', 'gospel', 'adult-contemporary', 'neo-soul', 'Tex-Mex', 'dad-rock', "rock-n-roll", 'alt-rock', 'electronica', 'J-Pop', 'R&B', 'synthpop', 'vaporwave', 'expirimental', 'trap', 'Atlanta-rap', 'cloud-rap', 'deep-house', 'house', 'future-funk', 'electro-funk', 'funk', 'chillwave', 'EDM', 'IDM', 'nightcore', 'disco', 'gangsta-rap', 'drill', 'old-skool #hip-hop', 'eurobeat', 'dream-pop', 'psych-rock', 'psych-pop', 'shoegaze', 'nu-metal', 'black-metal', 'dance-pop'];
     return '#' + genres[Math.floor(Math.random() * genres.length)];
 }
 
