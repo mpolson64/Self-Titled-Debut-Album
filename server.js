@@ -124,6 +124,11 @@ function genre() {
     return '#' + genres[Math.floor(Math.random() * genres.length)];
 }
 
+function artist() {
+    var artists = ['Justin Bieber', 'Rihanna', 'Drake', 'Zayn', 'Coldplay', 'Major Lazer', 'One Direction', 'Adele', 'Jason Derulo', 'Sia', 'Ellie Coulding', 'The Weeknd', 'Kanye West', 'Beyonce', 'Kendrick Lamar', 'Future'];
+    return artists[Math.floor(Math.random() * artists.length)];
+}
+
 //Generates band name and picks a genre, then puts them in a random tweet body archetype and creates album art
 function generateTweet() {
     generateBandName();
@@ -225,6 +230,12 @@ function generateTweet() {
         },
         function() {
             tweet = "This isn't a reissue or a remaster, this is a fresh new " + genre() + ' album! Do yourself a favor and check out ' + bandName + "'s self-titled debut album";
+        },
+        function() {
+            tweet = "If you're a " + artist() + " fan you'd better check out " + bandName + "'s self-titled debut album";
+        },
+        function() {
+            tweet = 'Catch some ' + artist() + '-esque sounds on ' + bandName + "'s selft-titled debut album";
         }
     ];
     tweets[Math.floor(Math.random() * tweets.length)]();
