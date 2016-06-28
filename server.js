@@ -1,6 +1,3 @@
-var request = require('request');
-var Twit = require('twit');
-
 const INTERVAL = process.env.INTERVAL; //Time inbetween tweets (in miliseconds)
 const WORDNIK_TIMEOUT = process.env.WORDNIK_TIMEOUT;
 const MIN_DICTIONARY_COUNT = process.env.MIN_DICTIONARY_COUNT; //Controls the likelyhood of rare words
@@ -10,6 +7,8 @@ const TWITTER_API_KEY = process.env.TWITTER_API_KEY;
 const TWITTER_API_SECRET = process.env.TWITTER_API_SECRET;
 const TWITTER_ACCESS_TOKEN = process.env.TWITTER_ACCESS_TOKEN;
 const TWITTER_ACCESS_SECRET = process.env.TWITTER_ACCESS_SECRET;
+var request = require('request');
+var Twit = require('twit');
 
 String.prototype.capitalize = function() {
     return this.charAt(0).toUpperCase() + this.slice(1);
