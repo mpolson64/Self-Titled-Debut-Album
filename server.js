@@ -31,7 +31,7 @@ function generateBandName() {
     var nameGenerators = [
 
         function() { //The Nouns (ex. The Beatles)
-            request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=noun-plural' + '&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
+            request('http://api.wordnik.com:80/v4/words.json/randomWord?hasDictionaryDef=false&minCorpusCount=0&maxCorpusCount=-1&minDictionaryCount=1&maxDictionaryCount=-1&includePartOfSpeech=noun-plural' + '&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
                 setTimeout(function() {
                     receivedWord = JSON.parse(data).word.capitalize();
                     bandName = 'The ' + receivedWord;
@@ -39,10 +39,10 @@ function generateBandName() {
             });
         },
         function() { //The Adjective Nouns (ex. The Flaming Lips)
-            request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=adjective&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
+            request('http://api.wordnik.com:80/v4/words.json/randomWord?hasDictionaryDef=false&minCorpusCount=0&maxCorpusCount=-1&minDictionaryCount=1&maxDictionaryCount=-1&includePartOfSpeech=adjective&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
                 setTimeout(function() {
                     bandName = 'The ' + JSON.parse(data).word.capitalize();
-                    request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=noun-plural&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
+                    request('http://api.wordnik.com:80/v4/words.json/randomWord?hasDictionaryDef=false&minCorpusCount=0&maxCorpusCount=-1&minDictionaryCount=1&maxDictionaryCount=-1&includePartOfSpeech=noun-plural&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
                         setTimeout(function() {
                             receivedWord = JSON.parse(data).word.capitalize();
                             bandName += ' ' + receivedWord;
@@ -52,10 +52,10 @@ function generateBandName() {
             });
         },
         function() { //Nouns of Noun (ex. Mates of State)
-            request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=noun-plural&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
+            request('http://api.wordnik.com:80/v4/words.json/randomWord?hasDictionaryDef=false&minCorpusCount=0&maxCorpusCount=-1&minDictionaryCount=1&maxDictionaryCount=-1&includePartOfSpeech=noun-plural&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
                 setTimeout(function() {
                     bandName = JSON.parse(data).word.capitalize();
-                    request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=noun&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
+                    request('http://api.wordnik.com:80/v4/words.json/randomWord?hasDictionaryDef=false&minCorpusCount=0&maxCorpusCount=-1&minDictionaryCount=1&maxDictionaryCount=-1&includePartOfSpeech=noun&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
                         setTimeout(function() {
                             bandName += ' of ' + JSON.parse(data).word.capitalize();
                         }, WORDNIK_TIMEOUT);
@@ -64,11 +64,11 @@ function generateBandName() {
             });
         },
         function() { //Proper Noun the Noun (ex. Chance the Rapper)
-            request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=proper-noun&excludePartOfSpeach=proper-noun-plural&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
+            request('http://api.wordnik.com:80/v4/words.json/randomWord?hasDictionaryDef=false&minCorpusCount=0&maxCorpusCount=-1&minDictionaryCount=1&maxDictionaryCount=-1&includePartOfSpeech=proper-noun&excludePartOfSpeach=proper-noun-plural&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
                 setTimeout(function() {
                     bandName = JSON.parse(data).word.capitalize();
                 }, WORDNIK_TIMEOUT);
-                request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=noun&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
+                request('http://api.wordnik.com:80/v4/words.json/randomWord?hasDictionaryDef=false&minCorpusCount=0&maxCorpusCount=-1&minDictionaryCount=1&maxDictionaryCount=-1&includePartOfSpeech=noun&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
                     setTimeout(function() {
                         bandName += ' the ' + JSON.parse(data).word.capitalize();
                     }, WORDNIK_TIMEOUT);
@@ -76,18 +76,18 @@ function generateBandName() {
             });
         },
         function() { //Noun-number (ex. Blink-182)
-            request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=noun&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
+            request('http://api.wordnik.com:80/v4/words.json/randomWord?hasDictionaryDef=false&minCorpusCount=0&maxCorpusCount=-1&minDictionaryCount=1&maxDictionaryCount=-1&includePartOfSpeech=noun&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
                 setTimeout(function() {
                     bandName = JSON.parse(data).word.capitalize() + '-' + Math.floor(Math.random() * 999 + 1);
                 }, WORDNIK_TIMEOUT);
             });
         },
         function() { //Adjective Noun (ex. Tame Impala)
-            request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=adjective&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
+            request('http://api.wordnik.com:80/v4/words.json/randomWord?hasDictionaryDef=false&minCorpusCount=0&maxCorpusCount=-1&minDictionaryCount=1&maxDictionaryCount=-1&includePartOfSpeech=adjective&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
                 setTimeout(function() {
                     bandName = JSON.parse(data).word.capitalize();
                 }, WORDNIK_TIMEOUT);
-                request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=noun&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
+                request('http://api.wordnik.com:80/v4/words.json/randomWord?hasDictionaryDef=false&minCorpusCount=0&maxCorpusCount=-1&minDictionaryCount=1&maxDictionaryCount=-1&includePartOfSpeech=noun&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
                     setTimeout(function() {
                         receivedWord = JSON.parse(data).word.capitalize();
                         bandName += ' ' + receivedWord;
@@ -97,18 +97,18 @@ function generateBandName() {
         },
         function() { //Propper Noun Letter Letter Letter (ex. Charlie XCX)
             const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-            request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=proper-noun&excludePartOfSpeach=proper-noun-plural&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
+            request('http://api.wordnik.com:80/v4/words.json/randomWord?hasDictionaryDef=false&minCorpusCount=0&maxCorpusCount=-1&minDictionaryCount=1&maxDictionaryCount=-1&includePartOfSpeech=proper-noun&excludePartOfSpeach=proper-noun-plural&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
                 setTimeout(function() {
                     bandName = JSON.parse(data).word.capitalize() + ' ' + letters.charAt(Math.floor(Math.random() * letters.length)) + letters.charAt(Math.floor(Math.random() * letters.length)) + letters.charAt(Math.floor(Math.random() * letters.length));
                 }, WORDNIK_TIMEOUT);
             });
         },
         function() { //Verb the Noun (ex. Run the Jewels)
-            request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=verb&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
+            request('http://api.wordnik.com:80/v4/words.json/randomWord?hasDictionaryDef=false&minCorpusCount=0&maxCorpusCount=-1&minDictionaryCount=1&maxDictionaryCount=-1&includePartOfSpeech=verb&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
                 setTimeout(function() {
                     bandName = JSON.parse(data).word.capitalize();
                 }, WORDNIK_TIMEOUT);
-                request('https://api.wordnik.com/v4/words.json/randomWord?hasDictionaryDef=true&minDictionaryCount=' + MIN_DICTIONARY_COUNT + '&includePartOfSpeech=noun-plural&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
+                request('http://api.wordnik.com:80/v4/words.json/randomWord?hasDictionaryDef=false&minCorpusCount=0&maxCorpusCount=-1&minDictionaryCount=1&maxDictionaryCount=-1&includePartOfSpeech=noun-plural&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
                     setTimeout(function() {
                         bandName += ' the ' + JSON.parse(data).word.capitalize();
                     }, WORDNIK_TIMEOUT + 1000);
