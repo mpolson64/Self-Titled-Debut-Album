@@ -1,6 +1,5 @@
 const INTERVAL = process.env.INTERVAL; //Time inbetween tweets (in miliseconds)
 const WORDNIK_TIMEOUT = process.env.WORDNIK_TIMEOUT;
-const MIN_DICTIONARY_COUNT = process.env.MIN_DICTIONARY_COUNT; //Controls the likelyhood of rare words
 
 const WORDNIK_API_KEY = process.env.WORDNIK_API_KEY;
 const TWITTER_API_KEY = process.env.TWITTER_API_KEY;
