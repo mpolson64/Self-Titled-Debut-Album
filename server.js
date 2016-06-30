@@ -51,6 +51,7 @@ function generateBandName() {
     var nameGenerators = [
 
         function() { //The Nouns (ex. The Beatles)
+            console.log('The Nouns');
             request('http://api.wordnik.com:80/v4/words.json/randomWord?hasDictionaryDef=false&minCorpusCount=0&maxCorpusCount=-1&minDictionaryCount=1&maxDictionaryCount=-1&includePartOfSpeech=noun-plural' + '&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
                 setTimeout(function() {
                     receivedWord = JSON.parse(data).word.capitalize();
@@ -59,6 +60,7 @@ function generateBandName() {
             });
         },
         function() { //The Adjective Nouns (ex. The Flaming Lips)
+            console.log('The Adjective Nouns');
             request('http://api.wordnik.com:80/v4/words.json/randomWord?hasDictionaryDef=false&minCorpusCount=0&maxCorpusCount=-1&minDictionaryCount=1&maxDictionaryCount=-1&includePartOfSpeech=adjective&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
                 setTimeout(function() {
                     bandName = 'The ' + JSON.parse(data).word.capitalize();
@@ -72,6 +74,7 @@ function generateBandName() {
             });
         },
         function() { //Nouns of Noun (ex. Mates of State)
+            console.log('Nouns of Noun');
             request('http://api.wordnik.com:80/v4/words.json/randomWord?hasDictionaryDef=false&minCorpusCount=0&maxCorpusCount=-1&minDictionaryCount=1&maxDictionaryCount=-1&includePartOfSpeech=noun-plural&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
                 setTimeout(function() {
                     bandName = JSON.parse(data).word.capitalize();
@@ -84,6 +87,7 @@ function generateBandName() {
             });
         },
         function() { //Proper Noun the Noun (ex. Chance the Rapper)
+            console.log('Proper Noun the Noun');
             request('http://api.wordnik.com:80/v4/words.json/randomWord?hasDictionaryDef=false&minCorpusCount=0&maxCorpusCount=-1&minDictionaryCount=1&maxDictionaryCount=-1&includePartOfSpeech=proper-noun&excludePartOfSpeach=proper-noun-plural&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
                 setTimeout(function() {
                     bandName = JSON.parse(data).word.capitalize();
@@ -96,6 +100,7 @@ function generateBandName() {
             });
         },
         function() { //Noun-number (ex. Blink-182)
+            console.log('Noun-number');
             request('http://api.wordnik.com:80/v4/words.json/randomWord?hasDictionaryDef=false&minCorpusCount=0&maxCorpusCount=-1&minDictionaryCount=1&maxDictionaryCount=-1&includePartOfSpeech=noun&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
                 setTimeout(function() {
                     bandName = JSON.parse(data).word.capitalize() + '-' + Math.floor(Math.random() * 999 + 1);
@@ -103,6 +108,7 @@ function generateBandName() {
             });
         },
         function() { //Adjective Noun (ex. Tame Impala)
+            console.log('Adjective Noun');
             request('http://api.wordnik.com:80/v4/words.json/randomWord?hasDictionaryDef=false&minCorpusCount=0&maxCorpusCount=-1&minDictionaryCount=1&maxDictionaryCount=-1&includePartOfSpeech=adjective&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
                 setTimeout(function() {
                     bandName = JSON.parse(data).word.capitalize();
@@ -116,6 +122,7 @@ function generateBandName() {
             });
         },
         function() { //Propper Noun Letter Letter Letter (ex. Charlie XCX)
+            console.log('Propper Noun Letter Letter Letter');
             const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
             request('http://api.wordnik.com:80/v4/words.json/randomWord?hasDictionaryDef=false&minCorpusCount=0&maxCorpusCount=-1&minDictionaryCount=1&maxDictionaryCount=-1&includePartOfSpeech=proper-noun&excludePartOfSpeach=proper-noun-plural&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
                 setTimeout(function() {
@@ -124,6 +131,7 @@ function generateBandName() {
             });
         },
         function() { //Verb the Noun (ex. Run the Jewels)
+            console.log('Verb the Noun');
             request('http://api.wordnik.com:80/v4/words.json/randomWord?hasDictionaryDef=false&minCorpusCount=0&maxCorpusCount=-1&minDictionaryCount=1&maxDictionaryCount=-1&includePartOfSpeech=verb&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
                 setTimeout(function() {
                     bandName = JSON.parse(data).word.capitalize();
@@ -145,7 +153,7 @@ function generateBandName() {
         2, //Blink-182
         3, //Charlie XCX
         8, //Tame Impala
-        4  //Run the Jewels
+        4 //Run the Jewels
     ];
 
     var roller = new WeightedRandomizer(rankings);
@@ -336,7 +344,11 @@ var doIt = function() {
     T.post('statuses/update', {
         status: tweet
     }, function(err, data, response) {
-        console.log(data);
+        if (!err) {
+            console.log(tweet);
+        } else {
+            console.log(data);
+        }
     });
 }
 
