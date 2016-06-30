@@ -7,8 +7,30 @@ const TWITTER_API_KEY = process.env.TWITTER_API_KEY;
 const TWITTER_API_SECRET = process.env.TWITTER_API_SECRET;
 const TWITTER_ACCESS_TOKEN = process.env.TWITTER_ACCESS_TOKEN;
 const TWITTER_ACCESS_SECRET = process.env.TWITTER_ACCESS_SECRET;
+
 var request = require('request');
 var Twit = require('twit');
+
+var WeightedRandomizer = function(rankings) {
+    this.rankings = rankings;
+}
+
+WeightedRandomizer.prototype.getNext = function() {
+    var total = 0;
+    for (i = 0; i < this.rankings.length; i++) {
+        total += this.rankings[i];
+    }
+
+    var roll = Math.floor(Math.random() * total);
+
+    subTotal = 0;
+    for (i = 0; i < this.rankings.length; i++) {
+        subTotal += this.rankings[i];
+        if (roll < subTotal) {
+            return i;
+        }
+    }
+}
 
 String.prototype.capitalize = function() {
     return this.charAt(0).toUpperCase() + this.slice(1);
@@ -27,6 +49,7 @@ var bandName;
 var tweet;
 
 function generateBandName() {
+
     var nameGenerators = [
 
         function() { //The Nouns (ex. The Beatles)
@@ -115,7 +138,20 @@ function generateBandName() {
             });
         }
     ];
-    nameGenerators[Math.floor(Math.random() * nameGenerators.length)]();
+
+    var rankings = [
+        10, //The Beatles
+        7, //The Flaming Lips
+        4, //Mates of State
+        5, //Chance the Rapper
+        2, //Blink-182
+        3, //Charlie XCX
+        8 //Tame Impala
+    ];
+
+    var roller = new WeightedRandomizer(rankings);
+
+    nameGenerators[roller.getNext()]();
 }
 
 function genre() {
