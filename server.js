@@ -223,7 +223,8 @@ function genre() {
 }
 
 function artist() {
-    var artists = ['Justin Bieber',
+    var artists = [
+        'Justin Bieber',
         'Rihanna',
         'Drake',
         'Zayn',
@@ -355,6 +356,14 @@ function generateTweet() {
             tweet = "It's all about " + feelings[Math.floor(Math.random() * feelings.length)] + ' on ' + bandName + "'s self-titled debut into " + genre();
         },
         function() {
+            var feelings = ['happiness', 'love', 'kindness', 'forgiveness', 'greif', 'revenge', 'hatred', 'anger', 'depression', 'lonliness', 'rejection', 'acceptance', 'self-affirmation', 'doubt'];
+            tweet = 'You can just feel the ' + feelings[Math.floor(Math.random() * feelings.length)] + ' through the ' + genre() + ' sounds on ' + bandName + "'s self-titled debut album";
+        },
+        function() {
+            var feelings = ['happiness', 'love', 'kindness', 'forgiveness', 'greif', 'revenge', 'hatred', 'anger', 'depression', 'lonliness', 'rejection', 'acceptance', 'self-affirmation', 'doubt'];
+            tweet = 'The ' + feelings[Math.floor(Math.random() * feelings.length)] + ' is absolutely palpable on ' + bandName + "'s " + genre() + " self-titled debut";
+        },
+        function() {
             tweet = "If you're a " + genre() + " boy you'd better have listened to the new self-titled debut album from " + bandName;
         },
         function() {
@@ -365,6 +374,21 @@ function generateTweet() {
         },
         function() {
             tweet = 'Catch some ' + artist() + '-esque sounds on ' + bandName + "'s selft-titled debut album";
+        },
+        function() {
+            tweet = 'Okay I totally thought I was listening to ' + artist() + ', but it was actually ' + bandName + ' on their new self-titled debut album!';
+        },
+        function() {
+            tweet = "Didn't think it was possible, but " + bandName + ' perfectly combined ' + genre() + ' and ' + genre() + ' on their self-titled debut album';
+        },
+        function() {
+            tweet = 'Been craving a ' + genre() + '-' + genre() + ' mashup? ' + bandName + ' has got you covered with their self-titled debut album';
+        },
+        function() {
+            tweet = 'ATTENTION HATERS/DOUBTERS/INTERNET-TROLLS: You were right, ' + bandName + "'s self-titled debut sucks. " + genre().capitalize() + ' music is over. Sorry';
+        },
+        function() {
+            tweet = 'What do you get when you combine ' + genre() + ' and ' + genre() + ' you ask? Well, ' + bandName + ' has the answer on their self-titled debut album; give it a listen';
         }
     ];
     tweets[Math.floor(Math.random() * tweets.length)]();
