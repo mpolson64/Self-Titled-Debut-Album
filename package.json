@@ -1,6 +1,6 @@
 {
   "name": "self-titled-debut-album",
-  "version": "1.2.0",
+  "version": "1.2.2",
   "description": "A twitter bot that generates a random band name. Follow me @SelfTitledDebutAlbum",
   "main": "index.js",
   "scripts": {

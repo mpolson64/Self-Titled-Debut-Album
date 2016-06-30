@@ -231,7 +231,7 @@ function generateTweet() {
             tweet = "I don't even like " + genre() + ' music, but ' + bandName + "'s self-titled debut album is straight fire!";
         },
         function() {
-            tweet = bandName + "'s self-titled debut album just chaged the " + genre() + ' game forever';
+            tweet = bandName + "'s self-titled debut album just changed the " + genre() + ' game forever';
         },
         function() {
             tweet = 'Absolutely loving the ' + genre() + ' sounds on ' + bandName + "'s self-titled debut album";
