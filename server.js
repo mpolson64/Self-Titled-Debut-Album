@@ -144,7 +144,8 @@ function generateBandName() {
         5, //Chance the Rapper
         2, //Blink-182
         3, //Charlie XCX
-        8 //Tame Impala
+        8, //Tame Impala
+        4  //Run the Jewels
     ];
 
     var roller = new WeightedRandomizer(rankings);
