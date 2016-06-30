@@ -223,7 +223,38 @@ function genre() {
 }
 
 function artist() {
-    var artists = ['Justin Bieber', 'Rihanna', 'Drake', 'Zayn', 'Coldplay', 'Major Lazer', 'One Direction', 'Adele', 'Jason Derulo', 'Sia', 'Ellie Coulding', 'The Weeknd', 'Kanye West', 'Beyonce', 'Kendrick Lamar', 'Future'];
+    var artists = ['Justin Bieber',
+        'Rihanna',
+        'Drake',
+        'Zayn',
+        'Coldplay',
+        'Major Lazer',
+        'One Direction',
+        'Adele',
+        'Jason Derulo',
+        'Sia',
+        'Ellie Coulding',
+        'The Weeknd',
+        'Kanye West',
+        'Beyonce',
+        'Kendrick Lamar',
+        'Future',
+        'A$AP Rocky',
+        'Captain Murphy',
+        'Chance the Rapper',
+        'Death Grips',
+        'Desiigner',
+        'Earl Sweatshirt',
+        'Grimes',
+        'Lil Yachty',
+        'Madvillain',
+        'The Mountain Goats',
+        'Nas',
+        'Neutral Milk Hotel',
+        'Real Estate',
+        'Tame Impala',
+        'Tyler, the Creator'
+    ];
     return artists[Math.floor(Math.random() * artists.length)];
 }
 
