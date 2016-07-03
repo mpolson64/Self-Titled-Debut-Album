@@ -91,12 +91,12 @@ function generateBandName() {
             request('http://api.wordnik.com:80/v4/words.json/randomWord?hasDictionaryDef=false&minCorpusCount=0&maxCorpusCount=-1&minDictionaryCount=1&maxDictionaryCount=-1&includePartOfSpeech=proper-noun&excludePartOfSpeach=proper-noun-plural&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
                 setTimeout(function() {
                     bandName = JSON.parse(data).word.capitalize();
-                }, WORDNIK_TIMEOUT);
                 request('http://api.wordnik.com:80/v4/words.json/randomWord?hasDictionaryDef=false&minCorpusCount=0&maxCorpusCount=-1&minDictionaryCount=1&maxDictionaryCount=-1&includePartOfSpeech=noun&api_key=' + WORDNIK_API_KEY, function(error, response, data) {
                     setTimeout(function() {
                         bandName += ' the ' + JSON.parse(data).word.capitalize();
                     }, WORDNIK_TIMEOUT);
                 });
+                }, WORDNIK_TIMEOUT);
             });
         },
         function() { //Noun-number (ex. Blink-182)
