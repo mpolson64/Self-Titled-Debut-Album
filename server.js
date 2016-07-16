@@ -337,7 +337,7 @@ function generateTweet() {
             tweet = 'Mark your calendars ' + genre() + ' fans because ' + bandName + ' is dropping their self-titled debut album on the ' + makeDay();
         },
         function() {
-            tweet = "There's no date yet, but " + bandName + "'s promissing " + genre() + ' fans their self-titled debut album WILL be coming this year';
+            tweet = "There's no date yet, but " + bandName + "'s promising " + genre() + ' fans their self-titled debut album WILL be coming this year';
         },
         function() {
             tweet = 'DM me if you have tickets to the ' + bandName + " show. I can't get their " + genre() + ' sound out of my head after their self-titled debut album';
